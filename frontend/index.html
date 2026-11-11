@@ -1,19 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClariCopilot | Asistente académico</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="/static/js/script.js" defer></script>
 </head>
 
 <body>
     <div class="app">
 
         <aside class="sidebar">
-            <a href="#" class="brand">
+            <a href="/" class="brand">
                 <span class="brand-icon">C</span>
                 <span>ClariCopilot</span>
             </a>
@@ -29,14 +29,18 @@
                 <a href="#resultado" class="nav-link">
                     ☷ Mi plan de tareas
                 </a>
+                <a href="#historial" class="nav-link">
+                    ◷ Historial
+                </a>
             </nav>
 
-            <div class="sidebar-note">
-                <strong>Tu copiloto académico</strong>
-                <p>
-                    Organiza tus instrucciones y convierte
-                    una actividad compleja en pasos claros.
-                </p>
+            <div class="user-box">
+                <span class="user-avatar" id="userInitial" aria-hidden="true">?</span>
+                <div class="user-info">
+                    <strong id="userName">Cargando…</strong>
+                    <span id="userEmail"></span>
+                </div>
+                <button id="logoutButton" class="logout" type="button">Salir</button>
             </div>
         </aside>
 
@@ -52,7 +56,10 @@
                     </p>
                 </div>
 
-                <span class="version">Prototipo v0.1</span>
+                <div class="header-badges">
+                    <span id="engineBadge" class="version">Motor: …</span>
+                    <span class="version">Prototipo v0.2</span>
+                </div>
             </header>
 
             <section class="welcome-banner">
@@ -85,27 +92,28 @@
 
                     <textarea
                         id="instructions"
+                        maxlength="10000"
                         placeholder="Pega aquí las instrucciones de tu tarea..."
                     ></textarea>
 
                     <div class="button-group">
-                        <button id="analyzeButton" class="button primary">
+                        <button id="analyzeButton" class="button primary" type="button">
                             Organizar instrucciones →
                         </button>
 
-                        <button id="exampleButton" class="button secondary">
+                        <button id="exampleButton" class="button secondary" type="button">
                             Probar ejemplo
                         </button>
 
-                        <button id="clearButton" class="button secondary">
+                        <button id="clearButton" class="button secondary" type="button">
                             Limpiar
                         </button>
                     </div>
 
                     <p class="help-text">
-                        Esta primera versión utiliza reglas básicas
-                        de texto. La API de inteligencia artificial
-                        se integrará posteriormente.
+                        El análisis se realiza en el servidor: con inteligencia
+                        artificial cuando está configurada y, si no, con reglas
+                        de texto. Cada análisis se guarda en tu historial.
                     </p>
                 </section>
 
@@ -130,6 +138,11 @@
                     </div>
 
                     <div id="results" hidden>
+                        <p class="result-meta">
+                            <span id="methodBadge" class="method-badge"></span>
+                            <span id="resultDate"></span>
+                        </p>
+
                         <section class="result-section">
                             <h3>Objetivo identificado</h3>
                             <div id="objective" class="result-box"></div>
@@ -157,11 +170,29 @@
                             </div>
                         </section>
 
-                        <p id="warning" class="warning"></p>
+                        <section class="result-section">
+                            <h3>Puntos por confirmar</h3>
+                            <ul id="warnings" class="warning"></ul>
+                        </section>
                     </div>
+
+                    <p id="statusMessage" class="status-message" role="status" hidden></p>
                 </section>
 
             </div>
+
+            <section class="card history-card" id="historial">
+                <div class="card-heading">
+                    <div>
+                        <h2>3. Historial</h2>
+                        <p>Tus análisis guardados. Ábrelos para seguir marcando tareas.</p>
+                    </div>
+                    <span class="label">GUARDADO</span>
+                </div>
+
+                <p id="historyEmpty" class="empty-state">Aún no tienes análisis guardados.</p>
+                <ul id="historyList" class="history-list"></ul>
+            </section>
 
             <footer class="footer">
                 ClariCopilot · Proyecto académico de Ingeniería
